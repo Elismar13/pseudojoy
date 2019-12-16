@@ -1,7 +1,8 @@
-#define NUMMARCHAS   8
+#define RESETADIRECAO  4
+#define NUMMARCHAS     8
 #define PINDADOSMARCHA 5
 
-byte gerenciaMarcha(Cambio cambio) {
+byte gerenciaMarcha() {
   for(byte i = 0; i < NUMMARCHAS; i++) {
     switch(i) {
       case 0:
@@ -27,7 +28,6 @@ byte gerenciaMarcha(Cambio cambio) {
       case 4:
         digitalWrite(2, 0);
         digitalWrite(3, 0);
-        safas
         digitalWrite(4, 1);
         break;
       case 5:
@@ -50,8 +50,14 @@ byte gerenciaMarcha(Cambio cambio) {
     if(!digitalRead(PINDADOSMARCHA)) return i+1;  //Marcha ativada
     delayMicroseconds(500);
   }
-  return 0;     //Se nada for ativado, então ta no neutro
+  return 0;     //Se nada for ativado, então o cambio se encontra no neutro
 }
 
-//Zero o conteudo do encoder
-if(!digitalRead(4)) Direcao.readAndReset();
+int16_t gerenciaDirecao() {
+  if(!digitalRead(RESETADIRECAO)) return Direcao.readAndReset();
+  else return Direcao.read();
+}
+
+int16_t gerenciaPedais(byte PinoPedal) {
+  return analogRead(PinoPedal);
+}
