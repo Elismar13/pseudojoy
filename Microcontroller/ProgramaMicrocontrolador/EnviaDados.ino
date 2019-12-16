@@ -7,7 +7,7 @@ int16_t ValorEncoder = 0;
 
 //Função setup
 void setup() {
-  //Iniciando comunicação serial à 115200 baud-rate
+  //Iniciando comunicação serial a 115200 baud-rate
   Serial.begin(115200);
 
   //Colocando os pinos digitais (DESLIGADOS) e analógicos como entradas
