@@ -2,8 +2,13 @@
 /*  FUNÇÃO QUE ENVIA TODOS OS DADOS NO BUFFER SERIAL
  *   
  *   Sequência da mensagem:
- *    CaractereInicio -> Marcha -> ValorPedais -> ValorDirecao
- *   "A,2,1023,1023,1023,1023,1023,1023,32100,\n"
+ *      >Analogicos + Direcão: 
+ *        CaractereInicio -> ValorPedais -> ValorDirecao
+ *       "A,2,1023,1023,1023,1023,1023,1023,32100,\n"
+ *      >Botoes:
+ *        CaractereInicio -> Marchas -> Acessórios
+ *        "B,0,1,0,1,1,1,1,0,0,1,0\n"
+ *        
 */
 
 //Vetor de interrupção
