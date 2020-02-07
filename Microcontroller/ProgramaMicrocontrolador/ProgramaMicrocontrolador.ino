@@ -2,8 +2,8 @@
 #include <avr/io.h>
 #include <Encoder.h>
 
-#define FREQUENCIAATUALIZACAO 30  //Envio 30 dados a cada 1 segundo
-#define FREQUENCIABOTOES      5   //Envio 5 dados a cada 1 segundo (a cada 200ms)
+#define FREQUENCIAATUALIZACAO 30  //Envio dados a cada 30ms
+#define FREQUENCIABOTOES      200   //Envio dados a cada 200ms
 
 Encoder Direcao(2, 3);    //Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
 int16_t ValorEncoder = 0;
@@ -30,5 +30,5 @@ void setup() {
 
 //Loop infinito
 void loop() {
-  enviaDados();
+  
 }

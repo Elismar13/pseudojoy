@@ -16,18 +16,16 @@ ISR(TIMER2_OVF_vect) {
     TimerBotoes++;
     
     if(TimerAnalogicos > FREQUENCIAATUALIZACAO) {
-      EnviaAnalogicos = true;       //Flag para controle das informações
+      enviaDados('A');     
       TimerAnalogicos = 0;
     }
     if(TimerBotoes > FREQUENCIABOTOES) {
-      EnviaDigitais = true;
+      enviaDados('M');
       TimerBotoes   = 0;
     }
     
    TCNT2 = 130;           //Reseta o timer para 130
    TIFR2 = 0x00;          //Timer2 INT Flag Reg: Clear Timer Overflow Flag
-   EnviaAnalogicos = false;
-   EnviaDigitais = false;
 }
 
 void configuraTimer2() {
@@ -43,11 +41,11 @@ void configuraTimer2() {
   TCCR2B = 0x05;        //Timer2 Control Reg B: Timer Prescaler set to 128
 }
 
-void enviaDados() {
+void enviaDados( char opcao ) {
   //Se a conexão Serial for estabelecida
   if(Serial) {
 
-    if(EnviaAnalogicos) {
+    if(opcao == 'A') {
       String Analogicos = "";   //String contendo o valor de todos botões analogicos
 
       //Leio o estado de todos botões analógicos 
@@ -67,13 +65,14 @@ void enviaDados() {
       Analogicos = "";
     }
 
-    if (EnviaDigitais) {
+    else if (opcao == 'M') {
       String Botoes = "";
       
       Serial.print('M');
       Serial.print(gerenciaMarcha()); Serial.print(',');
-      Serial.print(Botoes);
-      
+      Serial.println(Botoes);
+
+      Botoes = "";
     }
   }
 }
