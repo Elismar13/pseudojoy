@@ -8,7 +8,8 @@
 Encoder Direcao(2, 3);    //Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
 int16_t ValorEncoder = 0;
 
-bool envia = false;
+bool EnviaAnalogicos = false;
+bool EnviaDigitais   = false;
 
 //Variáveis de tempo
 byte TimerAnalogicos = 0;
