@@ -2,6 +2,8 @@
 #include <avr/io.h>
 #include <Encoder.h>
 
+#define FREQUENCIAATUALIZACAO 30
+
 Encoder Direcao(2, 3);    //Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
 int16_t ValorEncoder = 0;
 bool envia = false;

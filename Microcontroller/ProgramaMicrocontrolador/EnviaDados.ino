@@ -6,13 +6,14 @@
  *   "A,2,1023,1023,1023,1023,1023,1023,32100,\n"
 */
 
+//Vetor de interrupção
 ISR(TIMER2_OVF_vect) {
     Timer++;
-    if(Timer > 30) {
-      bool envia = true;
+    if(Timer > FREQUENCIAATUALIZACAO) {
+      bool envia = true;  //Flag para controle das informações
       Timer = 0;
     }
-   TCNT2 = 130;           //Reset Timer to 130 out of 255
+   TCNT2 = 130;           //Reseta o timer para 130
    TIFR2 = 0x00;          //Timer2 INT Flag Reg: Clear Timer Overflow Flag
    envia = false;
 }

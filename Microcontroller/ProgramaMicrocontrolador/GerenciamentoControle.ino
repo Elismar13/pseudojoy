@@ -54,7 +54,10 @@ byte gerenciaMarcha() {
 }
 
 int16_t gerenciaDirecao() {
-  if(!digitalRead(RESETADIRECAO)) return Direcao.readAndReset();
+  if(!digitalRead(RESETADIRECAO)) {
+    Direcao.write(0);
+    return 0;
+  }
   else return Direcao.read();
 }
 
