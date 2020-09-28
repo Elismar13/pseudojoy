@@ -5,7 +5,8 @@
 #define FREQUENCIAATUALIZACAO 30  //Envio dados a cada 30ms
 #define FREQUENCIABOTOES      200   //Envio dados a cada 200ms
 
-Encoder Direcao(2, 3);    //Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
+//Objeto encoder com os pinos 2 e 3 (interrupções 0 e 1, respectivamente)
+Encoder Direcao(2, 3);    
 int16_t ValorEncoder = 0;
 
 bool EnviaAnalogicos = false;
@@ -17,13 +18,15 @@ byte TimerBotoes     = 0;
 
 //Função setup
 void setup() {
-  Serial.begin(115200);   //Iniciando comunicação serial a 115200 baud-rate
-  configuraTimer2();      //Configurando timer2 para envio de dados Serial
+  //Iniciando comunicação serial a 115200 baud-rate
+  Serial.begin(115200);   
+
+  //Configurando timer2 para envio de dados Serial
+  configuraTimer2();      
   
   //Colocando os pinos digitais (DESLIGADOS) e analógicos como entradas
   for(byte i = 4; i < 21; i++) {
-    if(i < 14) pinMode(i, INPUT_PULLUP);
-    pinMode(i, INPUT);
+    (i < 14) ? pinMode(i, INPUT_PULLUP) : pinMode(i, INPUT);
     digitalWrite(i, HIGH);
   }
 }

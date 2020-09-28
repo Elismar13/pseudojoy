@@ -29,25 +29,14 @@ while 1:
     #Crio uma string com o valor de todos botões, separadas com uma vírgula
     #E em seguida separo-as
     if (recebido == 'A'.encode()):
-        receber = True
-        continue
+        mensagem = recebido.decode()
+        Analogicos = mensagem.split(',')
 
     elif (recebido == '\n'.encode()):
-        PinosArduino = mensagem.split(',')
-        BotoesDigitais = PinosArduino[:12]
-        Analogicos = PinosArduino[12:18]
-        receber = False
-
-        #print("Digitais: ", BotoesDigitais)
-        #print("Analogicos: ", Analogicos)
-
+        
         mensagem = ""
         Atualizar = True
         
-    if (receber):
-        mensagem += recebido.decode()
-
-
     #Quando eu receber tudo, atualizo os valores do botoes digitais e analogicos
     if(Atualizar):
       #-digitais

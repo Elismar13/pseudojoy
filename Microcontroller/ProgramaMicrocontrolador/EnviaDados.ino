@@ -20,7 +20,7 @@ ISR(TIMER2_OVF_vect) {
       TimerAnalogicos = 0;
     }
     if(TimerBotoes > FREQUENCIABOTOES) {
-      enviaDados('M');
+      enviaDados('B');
       TimerBotoes   = 0;
     }
     
@@ -45,34 +45,46 @@ void enviaDados( char opcao ) {
   //Se a conexão Serial for estabelecida
   if(Serial) {
 
-    if(opcao == 'A') {
-      String Analogicos = "";   //String contendo o valor de todos botões analogicos
-
-      //Leio o estado de todos botões analógicos 
-      for(byte BotaoAnalogico = 14; BotaoAnalogico < 20; BotaoAnalogico++) {
-        Analogicos += String(analogRead(BotaoAnalogico));
-        Analogicos += ',';
-      }
+    switch(opcao){
+      case('A'):
+        String Analogicos = "";   //String contendo o valor de todos botões analogicos
+  
+        //Leio o estado de todos botões analógicos 
+        for(byte BotaoAnalogico = 14; BotaoAnalogico < 20; BotaoAnalogico++) {
+          Analogicos += String(analogRead(BotaoAnalogico));
+          Analogicos += ',';
+        }
       
-      //Leio o valor do encoder
-      ValorEncoder = gerenciaDirecao();
-
-      //Envio todos os dados
-      Serial.print('A');
-      Serial.print(Analogicos);
-      Serial.println(ValorEncoder);
+        //Leio o valor do encoder
+        ValorEncoder = gerenciaDirecao();
+  
+        //Envio todos os dados
+        Serial.print('A');
+        Serial.print(Analogicos);
+        Serial.println(ValorEncoder);
 
       Analogicos = "";
-    }
-
-    else if (opcao == 'M') {
-      String Botoes = "";
+      break;
       
-      Serial.print('M');
-      Serial.print(gerenciaMarcha()); Serial.print(',');
-      Serial.println(Botoes);
+      case('M'):
+        String Botoes = "";
+        
+        Serial.print('M');
+        Serial.print(gerenciaMarcha()); Serial.print(',');
+        Serial.println(Botoes);
+  
+        Botoes = "";
+        break;
 
-      Botoes = "";
+      case('B'):
+        Botoes = "";
+
+        for(byte i = 4; i < 21; i++) {
+          Botoes += i;
+        }
+        Serial.print('B');
+        Serial.println(Botoes);
+        break;
     }
   }
 }

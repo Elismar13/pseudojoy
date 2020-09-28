@@ -1,9 +1,13 @@
 #include <Encoder.h>
 
-Encoder Direcao(2, 3);    //Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
+//Objeto encoder com os pinos 2 e # (interrupções 0 e 1, respectivamente)
+Encoder Direcao(2, 3);    
 
-String Botoes = "";     //String contendo o estado de todos botões (vou enviar ao python)
-String Analogicos = ""; //String contendo o valor de todos botões analogicos
+//Buffer contendo o estado de todos botões
+String Botoes = "";    
+
+//Buffer contendo o valor de todos botões analogicos
+String Analogicos = ""; 
 
 long ValorEncoder = 0;
 
