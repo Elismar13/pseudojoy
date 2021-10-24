@@ -66,18 +66,8 @@ void enviaDados( char opcao ) {
       Analogicos = "";
       break;
       
-      case('M'):
-        String Botoes = "";
-        
-        Serial.print('M');
-        Serial.print(gerenciaMarcha()); Serial.print(',');
-        Serial.println(Botoes);
-  
-        Botoes = "";
-        break;
-
       case('B'):
-        Botoes = "";
+        String Botoes = "";
 
         for(byte i = 4; i < 21; i++) {
           Botoes += i;

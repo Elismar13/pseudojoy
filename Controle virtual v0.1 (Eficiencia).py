@@ -9,68 +9,60 @@
 import pyvjoy as Vjoy
 import serial as sp
 
-#Objetos
-Controle = Vjoy.VJoyDevice(1)  # Assumo o controle 1 para o Vjoy
+control = Vjoy.VJoyDevice(1)  # Assumo o controle 1 para o Vjoy
 arduino = sp.Serial("COM3", 115200, timeout=1, write_timeout=1000)  #Inicio minha comunicação serial à 115200Kbps
 arduino.flushInput()
 
-#Variáveis
-botao = 1
-receber = False
-Atualizar = False
-mensagem = ""
-
-#loop infinito
 while 1:
-    recebido = arduino.read(1)
-    AtualizarBotao = 0
-    ValorEixo = 0
+    message = arduino.readline().decode()
+    update = False
 
-    #Crio uma string com o valor de todos botões, separadas com uma vírgula
-    #E em seguida separo-as
-    if (recebido == 'A'.encode()):
-        receber = True
-        continue
+    if(message != ''):
+        data = message[1:].split(',')[:-1]
+        print(data)
+        if(message[0] == 'A'):
+            control.data.wAxisX = int(data[0])*32
+            control.data.wAxisY = int(data[1])*32
+            control.data.wAxisZ = int(data[2])*32
+            control.data.wAxisVX = int(data[3])*32
+            control.data.wAxisVY = int(data[4])*32
+            control.data.wAxisVZ = int(data[5])*32
 
-    elif (recebido == '\n'.encode()):
-        PinosArduino = mensagem.split(',')
-        BotoesDigitais = PinosArduino[:12]
-        Analogicos = PinosArduino[12:18]
-        receber = False
-
-        #print("Digitais: ", BotoesDigitais)
-        #print("Analogicos: ", Analogicos)
-
-        mensagem = ""
-        Atualizar = True
+            control.update()
         
-    if (receber):
-        mensagem += recebido.decode()
+        elif(message[0] == 'B'):
+            buttonCount = 0
+            buttonValueToUpdate = 0
+            for button in data:
+                if(button == '1'):
+                    buttonValueToUpdate += 2**buttonCount
+                buttonValueToUpdate += 1
+            control.data.lButtons = buttonValueToUpdate
+            control.update()
 
+    
+    # if(arduino.):
+    #   #-digitais
+    #     botao = 0
+    #     for BotaoDigital in BotoesDigitais:
+    #         if(BotaoDigital == '1'):
+    #             AtualizarBotao += 2**botao
+    #         botao += 1
 
-    #Quando eu receber tudo, atualizo os valores do botoes digitais e analogicos
-    if(Atualizar):
-      #-digitais
-        botao = 0
-        for BotaoDigital in BotoesDigitais:
-            if(BotaoDigital == '1'):
-                AtualizarBotao += 2**botao
-            botao += 1
+    #     Controle.data
+    #     Controle.data.lButtons = AtualizarBotao
 
-        Controle.data
-        Controle.data.lButtons = AtualizarBotao
-
-      #-analogicos
-        try:
-            ValorEixo = int(BotaoDigital)
-        except:
-            ValorEixo = 512
-            continue
-        Controle.data.wAxisX = int(Analogicos[0])*32
-        #print(int(Analogicos[0]))
-        #print(int(Analogicos[0])*64)
-        Controle.update()
-    atualizar = False
+    #   #-analogicos
+    #     try:
+    #         ValorEixo = int(BotaoDigital)
+    #     except:
+    #         ValorEixo = 512
+    #         continue
+    #     Controle.data.wAxisX = int(Analogicos[0])*32
+    #     print(int(Analogicos[0]))
+    #     print(int(Analogicos[0])*64)
+    #     Controle.update()
+    # atualizar = False
 
 arduino.close()
-Controle.__del__()
+control.__del__()
