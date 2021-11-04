@@ -44,26 +44,31 @@ void configuraTimer2() {
 void enviaDados( char opcao ) {
   //Se a conexão Serial for estabelecida
   if(Serial) {
+    char bufferToSend[100];
+    boolean messageHasAlreadySent = false;
 
     switch(opcao){
       case('A'):
         String Analogicos = "";   //String contendo o valor de todos botões analogicos
   
         //Leio o estado de todos botões analógicos 
-        for(byte BotaoAnalogico = 14; BotaoAnalogico < 20; BotaoAnalogico++) {
-          Analogicos += String(analogRead(BotaoAnalogico));
-          Analogicos += ',';
+        sprintf(bufferToSend, "A");
+        for(byte botaoAnalogico = 14; botaoAnalogico < 20; botaoAnalogico++) {
+          sprintf(bufferToSend + strlen(bufferToSend), "%d,", botaoAnalogico);
+          //Analogicos += String(analogRead(BotaoAnalogico));
+          //Analogicos += ',';
         }
       
         //Leio o valor do encoder
-        ValorEncoder = gerenciaDirecao();
-  
-        //Envio todos os dados
-        Serial.print('A');
-        Serial.print(Analogicos);
-        Serial.println(ValorEncoder);
+        int16_t valorEncoder = gerenciaDirecao();
+        sprintf(bufferToSend+ strlen(bufferToSend), "%d,\n", valorEncoder);
 
-      Analogicos = "";
+        //Envio todos os dados
+        if(!messageHasAlreadySent) {
+           Serial.print(bufferToSend);
+           messageHasAlreadySent != messageHasAlreadySent;
+        }
+        
       break;
       
       case('B'):

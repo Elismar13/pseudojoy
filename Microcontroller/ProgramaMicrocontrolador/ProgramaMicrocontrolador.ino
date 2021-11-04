@@ -7,7 +7,6 @@
 
 //Objeto encoder com os pinos 2 e 3 (interrupções 0 e 1, respectivamente)
 Encoder Direcao(2, 3);    
-int16_t ValorEncoder = 0;
 
 bool EnviaAnalogicos = false;
 bool EnviaDigitais   = false;

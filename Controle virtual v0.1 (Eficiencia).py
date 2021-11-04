@@ -8,20 +8,21 @@
 #Bibliotecas
 import pyvjoy as Vjoy
 import serial as sp
+import time
 
 control = Vjoy.VJoyDevice(1)  # Assumo o controle 1 para o Vjoy
 arduino = sp.Serial("COM3", 115200, timeout=1, write_timeout=1000)  #Inicio minha comunicação serial à 115200Kbps
 arduino.flushInput()
 
 while 1:
+    time.sleep(0.001)
     message = arduino.readline().decode()
     update = False
-
+    
     if(message != ''):
-        data = message[1:].split(',')[:-1]
-        print(data)
+        data = message[1:-2].split(',')
         if(message[0] == 'A'):
-            control.data.wAxisX = int(data[0])*32
+            control.data.wAxisX = int(data[6])*250
             control.data.wAxisY = int(data[1])*32
             control.data.wAxisZ = int(data[2])*32
             control.data.wAxisVX = int(data[3])*32
