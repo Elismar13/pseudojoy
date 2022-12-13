@@ -22,7 +22,7 @@ while 1:
     if(message != ''):
         data = message[1:-2].split(',')
         if(message[0] == 'A'):
-            control.data.wAxisX = int(data[6])*250
+            control.data.wAxisX = int(data[6])*100 + 16000
             control.data.wAxisY = int(data[1])*32
             control.data.wAxisZ = int(data[2])*32
             control.data.wAxisVX = int(data[3])*32
@@ -32,12 +32,12 @@ while 1:
             control.update()
         
         elif(message[0] == 'B'):
-            buttonCount = 0
+            buttonCount = 1
             buttonValueToUpdate = 0
-            for button in data:
-                if(button == '1'):
+            for button in range(len(data[0])):
+                if(data[0][button] == '1'):
                     buttonValueToUpdate += 2**buttonCount
-                buttonValueToUpdate += 1
+                buttonCount += 1
             control.data.lButtons = buttonValueToUpdate
             control.update()
 

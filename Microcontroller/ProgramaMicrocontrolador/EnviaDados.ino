@@ -1,4 +1,3 @@
-
 /*  FUNÇÃO QUE ENVIA TODOS OS DADOS NO BUFFER SERIAL
  *   
  *   Sequência da mensagem:
@@ -10,18 +9,53 @@
  *       "M5,0,1,0,1,1"
 */
 
+void sendAnalogState() {
+    if(Serial) {
+      int bufferCount = sprintf(bufferToSend, "A");
+
+      for(byte analogPin = 14; analogPin < 20; analogPin++) {
+        bufferCount += sprintf(bufferToSend + bufferCount, "%d,", analogPin);
+      }
+      
+      //Leio o valor do encoder
+      int16_t valorEncoder = gerenciaDirecao();
+      bufferCount += sprintf(bufferToSend + bufferCount, "%d,\n", valorEncoder);
+
+      //Envio todos os dados
+      Serial.write(bufferToSend, bufferCount);
+    }
+}
+
+void sendButtonsState() {
+  if(Serial) {
+    int bufferCount = 1;
+    short buttonCount = 12;
+
+    bufferToSend[0] = 'B';
+    bufferToSend[10] = '\0';
+
+    for(buttonCount; buttonCount > 3; buttonCount--) {
+      bufferToSend[buttonCount - 3] = digitalRead(buttonCount) ? '0' : '1';
+    }
+
+    Serial.println(bufferToSend);
+  }
+}
+
 //Vetor de interrupção
 ISR(TIMER2_OVF_vect) {
     TimerAnalogicos++;
-    TimerBotoes++;
-    
+    TimerBotoes++;    
+
+
     if(TimerAnalogicos > FREQUENCIAATUALIZACAO) {
-      enviaDados('A');     
+     sendAnalogState();
       TimerAnalogicos = 0;
     }
+
     if(TimerBotoes > FREQUENCIABOTOES) {
-      enviaDados('B');
-      TimerBotoes   = 0;
+      sendButtonsState();
+      TimerBotoes = 0;
     }
     
    TCNT2 = 130;           //Reseta o timer para 130
@@ -41,45 +75,4 @@ void configuraTimer2() {
   TCCR2B = 0x05;        //Timer2 Control Reg B: Timer Prescaler set to 128
 }
 
-void enviaDados( char opcao ) {
-  //Se a conexão Serial for estabelecida
-  if(Serial) {
-    char bufferToSend[100];
-    boolean messageHasAlreadySent = false;
 
-    switch(opcao){
-      case('A'):
-        String Analogicos = "";   //String contendo o valor de todos botões analogicos
-  
-        //Leio o estado de todos botões analógicos 
-        sprintf(bufferToSend, "A");
-        for(byte botaoAnalogico = 14; botaoAnalogico < 20; botaoAnalogico++) {
-          sprintf(bufferToSend + strlen(bufferToSend), "%d,", botaoAnalogico);
-          //Analogicos += String(analogRead(BotaoAnalogico));
-          //Analogicos += ',';
-        }
-      
-        //Leio o valor do encoder
-        int16_t valorEncoder = gerenciaDirecao();
-        sprintf(bufferToSend+ strlen(bufferToSend), "%d,\n", valorEncoder);
-
-        //Envio todos os dados
-        if(!messageHasAlreadySent) {
-           Serial.print(bufferToSend);
-           messageHasAlreadySent != messageHasAlreadySent;
-        }
-        
-      break;
-      
-      case('B'):
-        String Botoes = "";
-
-        for(byte i = 4; i < 21; i++) {
-          Botoes += i;
-        }
-        Serial.print('B');
-        Serial.println(Botoes);
-        break;
-    }
-  }
-}
